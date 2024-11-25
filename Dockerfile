@@ -31,13 +31,9 @@ RUN \
     python3-venv \
     xdg-utils && \
   echo "**** install calibre-web ****" && \
-  if [ -z ${CALIBREWEB_RELEASE+x} ]; then \
-    CALIBREWEB_RELEASE=$(curl -sX GET "https://api.github.com/repos/janeczku/calibre-web/releases/latest" \
-    | awk '/tag_name/{print $4;exit}' FS='[""]'); \
-  fi && \
   curl -o \
     /tmp/calibre-web.tar.gz -L \
-    https://github.com/janeczku/calibre-web/archive/${CALIBREWEB_RELEASE}.tar.gz && \
+    https://codeload.github.com/lara-kanevsky/calibre-web/zip/refs/heads/master && \
   mkdir -p \
     /app/calibre-web && \
   tar xf \
@@ -51,7 +47,7 @@ RUN \
   pip install -U --no-cache-dir --find-links https://wheel-index.linuxserver.io/ubuntu/ -r \
     requirements.txt -r \
     optional-requirements.txt && \
-  echo "***install kepubify" && \
+  echo "**** install kepubify ****" && \
   if [ -z ${KEPUBIFY_RELEASE+x} ]; then \
     KEPUBIFY_RELEASE=$(curl -sX GET "https://api.github.com/repos/pgaskin/kepubify/releases/latest" \
     | awk '/tag_name/{print $4;exit}' FS='[""]'); \
@@ -72,12 +68,12 @@ RUN \
     /var/tmp/* \
     /root/.cache
 
-# add local files
+# add local files
 COPY root/ /
 
 # add unrar
 COPY --from=unrar /usr/bin/unrar-ubuntu /usr/bin/unrar
 
-# ports and volumes
+# ports and volumes
 EXPOSE 8083
 VOLUME /config
