@@ -1,0 +1,19 @@
+---
+services:
+  calibre-web:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: calibre-web
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Argentina/Buenos_Aires
+      - DOCKER_MODS=linuxserver/mods:universal-calibre #optional
+      - OAUTHLIB_RELAX_TOKEN_SCOPE=1 #optional
+    volumes:
+      - /CalibreConfig:/config
+      - /CalibreLibrary:/books
+    ports:
+      - 8083:8083
+    restart: unless-stopped

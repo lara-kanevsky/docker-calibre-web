@@ -18,7 +18,8 @@ RUN \
     build-essential \
     libldap2-dev \
     libsasl2-dev \
-    python3-dev && \
+    python3-dev \
+    unzip && \
   echo "**** install runtime packages ****" && \
   apt-get install -y --no-install-recommends \
     imagemagick \
@@ -32,13 +33,14 @@ RUN \
     xdg-utils && \
   echo "**** install calibre-web ****" && \
   curl -o \
-    /tmp/calibre-web.tar.gz -L \
-    https://codeload.github.com/lara-kanevsky/calibre-web/zip/refs/heads/master && \
+    /tmp/calibre-web.zip -L \
+    https://codeload.github.com/lara-kanevsky/calibre-web/zip/refs/heads/master && \ 
   mkdir -p \
     /app/calibre-web && \
-  tar xf \
-    /tmp/calibre-web.tar.gz -C \
-    /app/calibre-web --strip-components=1 && \
+  unzip -q \
+    /tmp/calibre-web.zip -d /tmp && \ 
+  mv /tmp/calibre-web-master/* /app/calibre-web/ && \  
+  rm -rf /tmp/calibre-web.zip /tmp/calibre-web-master && \
   cd /app/calibre-web && \
   python3 -m venv /lsiopy && \
   pip install -U --no-cache-dir \
